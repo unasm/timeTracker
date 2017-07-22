@@ -130,7 +130,6 @@
    * @param {function} callback The callback to fire after saving
    */
   Store.prototype.remove = function (id, callback) {
-    console.log(id);
     chrome.storage.local.get(this._dbName, function(storage) {
       var data = storage[this._dbName];
       var todos = data.todos;
@@ -157,8 +156,15 @@
    * @param {function} callback The callback to fire after dropping the data
    */
   Store.prototype.drop = function (callback) {
-    localStorage[this._dbName] = JSON.stringify({todos: []});
-    callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
+    callback = callback || function () {};
+    var storage = {};
+    storage[this._dbName] = {"todos": []};
+
+    chrome.storage.local.set(storage,  function() {
+      callback.call(this, storage[this._dbName].todos);
+    }.bind(this));
+    //localStorage[this._dbName] = JSON.stringify({todos: []});
+    //callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
   };
 
   // Export to window

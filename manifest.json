@@ -7,22 +7,29 @@
 	"icons": {
         "128": "images/icon128.png"
     },
-    "app" : {
-        "background": {
-            "scripts" : ["background.js"]
-            //"page" : "background.html",
-            //"persistent" : false
-        }
-    },
+//    "app" : {
+//        "background": {
+//            "scripts" : ["background.js"]
+//            //"page" : "background.html",
+//            //"persistent" : false
+//        }
+//    },
 
-    //"background" : {
+    "background" : {
         //"page" : "background.html",
-        //"persistent" : false
-    //}
-//	"browser_action": {
-		//"default_icon": "images/icon19.png",
-        //"default_title" : "everyone need to die"
-	//},
+        "scripts" : [
+            //"js/controller/visitedController.js",
+            "js/model/basemodel.js",
+            "js/util/util.js",
+            "js/model/visitedModel.js",
+            "background.js"
+        ],
+        "persistent" : false
+    },
+	"browser_action": {
+		"default_icon": "images/icon19.png",
+        "default_title" : "everyone need to die"
+	},
 	"permissions": [
         "notifications", 
         "fullscreen",

@@ -16,14 +16,14 @@
 		<section >
 			<table border = "0">
 				<tbody id = "visited">
-					<tr data-href = "http:://www.baidu.com">
+					<tr data-href = "www.baidu.com">
 						<td class = "color"></td>
 						<td class = "url">www.baidu asdf ad fa df adf a  .com</td>
 						<td class = "hour textCenter">1小时21分</td>
 						<td class = "textCenter prop">高效</td>
 						<td class = "textCenter oper" ><button class = "add">禁止</button></td>
 					</tr>
-					<tr data-href = "http:://www.baidu.com">
+					<tr data-href = "www.baidu.com">
 						<td class = "color"></td>
 						<td class = "url">www.sina.cn.com</td>
 						<td class = "hour textCenter">1小时21分</td>
@@ -57,10 +57,8 @@
 			</table>
 		</section>
 		<section>
-			<form>
-				<input type = "text" id="add-black" class = "input" placeholder="添加禁止访问黑名单"/>
-				<input type = "button"/>
-			</form>
+			<input type = "text" id="add-black" class = "input" placeholder="添加禁止访问黑名单"/>
+			<input type = "button"/>
 		</section>
 	</section>
 	<!--
@@ -70,10 +68,17 @@
 	<script src="js/bootstrap.js"></script>
 	<script src="js/helpers.js"></script>
 	<script src="js/store.js"></script>
-	<script src="js/model.js"></script>
-	<script src="js/view.js"></script>
+	<script src="js/model/basemodel.js"></script>
+	<script src="js/model/blackModel.js"></script>
+	<script src="js/model/visitedModel.js"></script>
+	<script src="js/view/blackView.js"></script>
+	<script src="js/view/visitView.js"></script>
+	<!--
   	<script src="js/controller.js"></script>
-  <script src="js/app.js"></script>
+  	-->
+  	<script src="js/controller/blackController.js"></script>
+  	<script src="js/controller/visitedController.js"></script>
+    <script src="js/app.js"></script>
   <!--
   <script src="js/alarms.js"></script>
   <script src="js/export.js"></script>	
