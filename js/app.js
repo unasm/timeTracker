@@ -13,19 +13,29 @@
 		this.model = new app.BlackModel(this.storage);
 		this.view = new app.BlackView();
 		this.controller = new app.BlackController(this.model, this.view);
+    
 		this.controller.showAll();
 	}
 
 	function Visited(name) {
+        console.log(name);
 		this.storage = new app.Store(name);
-		this.model = new app.VisitedModel(this.storage);	
-		this.view = new app.VisitedView();	
-		this.controller = new app.VisitedController(this.model, this.view);
-		this.controller.showAll();
-	}
+        this.visitModel = new app.LogModel(this.storage);
+        this.visitView = new app.VisitedView;
+        this.visitController = new app.VisitedController(this.visitModel, this.visitView);
+        this.visitController.showAll();
 
-	var forbidden = new Forbidden('forbiddenList');
-	var visited  = new Visited('VisitedList');
+		//this.model = new app.VisitedModel(this.storage);	
+		//this.view = new app.VisitedView();	
+		//this.controller = new app.VisitedController(this.model, this.view);
+		//this.controller.showAll();
+	}
+	if (window.location.href.indexOf('#') === -1) {
+      window.location.hash = '#/';
+    }
+
+	var forbidden = new Forbidden(CONFIG.getForbiddenDbName());
+	var visited  = new Visited(CONFIG.getVisitedDbName());
 
 	/**
 	 * Finds the model ID of the clicked DOM element
@@ -47,16 +57,17 @@
 	 * 解析获得url的 各个组成部分
 	 */
 	function parserUrl(href) {
+		return url.parserUrl(href);
 		var parser = document.createElement('a');
 		parser.href = href;
 		return parser;
 	}
 
-	function isUrl(url){
-   		var strRegex = "^([A-Za-z]+://)?(www\\.)?[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=]+$"
-        var re=new RegExp(strRegex);
-        return re.test(url);
-	}
+	//function isUrl(url){
+   	//	var strRegex = "^([A-Za-z]+://)?(www\\.)?[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=]+$"
+    //    var re=new RegExp(strRegex);
+    //    return re.test(url);
+	//}
 	function getHostname(url) {
 		if (!(url.substr(0, 7) === "http://")) {
 			url = "http://" + url;
@@ -84,7 +95,7 @@
 	$$('#add-black').addEventListener('keypress', function (e) {
 		var target = e.target;
 		if (e.keyCode == ENTER_KEY) {
-			if (isUrl(target.value) == false) {
+			if (util.isUrl(target.value) == false) {
 				return true;
 			}
 			var hostname = getHostname(target.value);
@@ -92,32 +103,8 @@
 			target.value = '';
 		}
 	});
-
-	// A delegation event. Will check what item was clicked whenever you click on any
-	// part of a list item.
-//	$$('#todo-list').addEventListener('click', function (e) {
-//		var target = e.target;
-//
-//		// If you click a destroy button
-//		if (target.className.indexOf('destroy') > -1) {
-//			todo.controller.removeItem(lookupId(target));
-//		}
-//
-//		// If you click the checkmark
-//		if (target.className.indexOf('toggle') > -1) {
-//			todo.controller.toggleComplete(lookupId(target), target);
-//		}
-//
-//	});
-//
-//	$$('#todo-list').addEventListener('dblclick', function (e) {
-//		var target = e.target; if (target.nodeName === 'LABEL') { todo.controller.editItem(lookupId(target), target); } });
-//
-//	$$('#toggle-all').addEventListener('click', function (e) {
-//		todo.controller.toggleAll(e);
-//	});
-//
-//	$$('#clear-completed').addEventListener('click', function () {
-//		todo.controller.removeCompletedItems();
-//	});
+    $$('#test').addEventListener('click', function (e) {
+        visited.visitController.showAll();
+	});
+    //console.log("asdfa");
 })();

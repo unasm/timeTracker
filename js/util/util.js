@@ -19,11 +19,30 @@ Util.prototype.sendNotice = function(title, content) {
 Util.prototype.getNow = function() {
 	return (new Date).getTime() * 0.001;
 }
+/**
+    只去比较 ? 之前的部分，之后的内容太不可控，
+ */
 
 Util.prototype.isUrl = function(url) {
-   	var strRegex = "^([A-Za-z]+://)?(www\\.)?[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=#]+$"
+    var arr = url.split("?") ;
+   	var strRegex = "^([A-Za-z]+://)?(www\\.)?[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=#]+$";
     var re = new RegExp(strRegex);
-    return re.test(url);
+    return re.test(arr[0]);
+}
+/**
+ * 解析获得url的 各个组成部分
+*/
+Util.prototype.parserUrl = function(href) {
+    var parser = document.createElement('a');
+    parser.href = href;
+    return parser;
 }
 
+Util.prototype.getMin = function(vala, valb) {
+    return vala > valb ? valb : vala;
+}
+
+Util.prototype.stampToMinutes = function(timestamp) {
+    return parseInt(timestamp / 60) + "分钟" 
+}
 var util = new Util();

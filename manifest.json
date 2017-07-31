@@ -6,14 +6,15 @@
 	"description": "记录浏览的途径",
 	"icons": {
         "128": "images/icon128.png"
+        //"19" : "images/icon19.png"
     },
-//    "app" : {
-//        "background": {
-//            "scripts" : ["background.js"]
-//            //"page" : "background.html",
-//            //"persistent" : false
-//        }
-//    },
+    //"app" : {
+    //    "background": {
+    //        //"scripts" : ["background.js"]
+    //        "page" : "background.html",
+    //        "persistent" : false
+    //    }
+    //},
 
     "background" : {
         //"page" : "background.html",
@@ -21,28 +22,46 @@
             //"js/controller/visitedController.js",
             "js/model/basemodel.js",
             "js/util/util.js",
+            "js/store.js",
+            "js/config.js",
+            "js/tabs.js",
+            "js/model/logModel.js",
             "js/model/visitedModel.js",
             "background.js"
         ],
         "persistent" : false
     },
+	//"default_icon": "images/icon19.png",
 	"browser_action": {
 		"default_icon": "images/icon19.png",
         "default_title" : "everyone need to die"
 	},
+    //"background": {
+    //    "page": "popup.html"
+    //},
+    //"page_action": {
+    //    "default_icon": {
+    //        "19": "images/icon19.png",
+    //        "16": "images/icon16.png"
+    //        //"38": "images/icon38.png"
+    //    },
+    //    "default_title": "测试插件",
+    //    "default_popup": "popup.html"
+    //},
+          
 	"permissions": [
         "notifications", 
-        "fullscreen",
+        //"fullscreen",
         "storage",
         "tabs",
         "webNavigation",
         "alarms",
         "activeTab",
         "background",
-        "bookmarks",
-        "sessions", 
-        "webview",
-        "<all_urls>",
-        {"fileSystem" : ["write"]}
+        //"bookmarks",
+        "sessions"
+        //"webview"
+        //"<all_urls>"
+//        {"fileSystem" : ["write"]}
     ]
 }

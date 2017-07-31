@@ -37,17 +37,16 @@
    * //Below will find a model with foo equalling bar and hello equalling world.
    * model.read({ foo: 'bar', hello: 'world' });
    */
-  Model.prototype.read = function (query, callback) {
+  Model.prototype.read = function (query, callback, compare) {
     var queryType = typeof query;
     callback = callback || function () {};
-
     if (queryType === 'function') {
       callback = query;
       return this.storage.findAll(callback);
     } else if (queryType === 'string' || queryType === 'number') {
-      this.storage.find({ id: query }, callback);
+      this.storage.find({ id: query }, callback, compare);
     } else {
-      this.storage.find(query, callback);
+      this.storage.find(query, callback, compare);
     }
   };
 

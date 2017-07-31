@@ -8,13 +8,16 @@
 	 * @constructor
 	 */
 	function View() {
+		this.pageNum = 10;
 		this.defaultTemplate 
-		= 	'<tr data-id="{{id}}">'
-		+		'<td class = "url">{{href}}</td>'
-		+		'<td>{{notice}}</td>'
-		+		'<td>{{delete}}</td>'
-		+	'</tr>';
-	}
+		= '<tr data-href = "{{host}}">'
+		+	'<td class = "color"></td>'
+		+	'<td class = "url">{{host}}</td>'
+		+	'<td class = "hour textCenter">{{time}}</td>'
+		+	'<td class = "textCenter prop">{{tag}}</td>'
+		+	'<td class = "textCenter oper" ><button class = "add">禁止</button></td>'
+		+'</tr>'
+}
 
 	/**
 	 * Creates an <li> HTML string and returns it for placement in your app.
@@ -30,11 +33,20 @@
 	 *	completed: 0,
 	 * });
 	 */
-	View.prototype.showList = function (data) {
+	View.prototype.showPage = function (data, pageId) {
 		var i, l;
 		var view = '';
-		for (i = 0, l = data.length; i < l; i++) {
-			view = view + this.showOne(data[i])
+		pageId = pageId || 0;
+		var start = pageId * this.pageNum;
+		if (start > (data.length)) {
+			start = start.length;
+		}
+		var end = start + this.pageNum;
+		if (end > data.length) {
+			end = data.length;			
+		}
+		for (i = start; i < end; i++) {
+			view += this.showOne(data[i])
 		}
 		return view;
 	};
@@ -52,27 +64,17 @@
      * })
 	 */
 	View.prototype.showOne = function(row) {
+        console.log(row);
 		var template = this.defaultTemplate;
 		var notice = '';
 		var deleteNode = '';
-		if (row.href == undefined) {
-			return '';
-		}
-
-		console.log(row);
-		if (row.frozenTime !== -1) {
-			//不允许删除
-			notice = row.frozenTime + " 分钟内禁止删除，已加黑12分钟"; 
-		} else {
-			//不在冰冻期内就允许删除
-			notice = "已经禁止12分钟";
-			deleteNode = "<span class = 'delete'>删除</span>";
-		}
-
-		template = template.replace('{{id}}', row.id);
-		template = template.replace('{{href}}', row.href);
-		template = template.replace('{{notice}}', notice);
-		template = template.replace('{{delete}}', deleteNode);
+        var tag = '';
+		
+		var minute = util.stampToMinutes(row.length);
+		template = template.replace(/{{host}}/g, row.host);
+		//template = template.replace('{{host}}', row.host);
+		template = template.replace('{{time}}', minute);
+		template = template.replace('{{tag}}', tag);
 		return template;
 	}
 	// Export to window

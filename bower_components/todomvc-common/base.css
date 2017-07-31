@@ -1,0 +1,83 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+    height:555px;
+    width:380px;
+}
+
+button {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-size: 100%;
+	vertical-align: baseline;
+	font-family: inherit;
+	color: inherit;
+	-webkit-appearance: none;
+	/*-moz-appearance: none;*/
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+}
+
+body {
+	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.4em;
+	background: #eaeaea url('bg.png');
+	color: #4d4d4d;
+	width: 550px;
+	margin: 0 auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+	-ms-font-smoothing: antialiased;
+	-o-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
+.textCenter {
+    text-align:center;
+}
+
+.url {
+    display:block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    width:150px;
+}
+
+h3 {
+    margin:5px 0 auto;
+}
+
+.input {
+    border-radius: 5px;
+    padding:5px;
+}
+.title {
+    font-family:cursive;
+    padding: 10px 5px;
+    font-size:1.5em;
+}
+.area {
+    margin:10px 5px auto;
+}
+
+#visited {
+    height:200px;
+    overflow:scroll;
+    padding:5px 0;
+}
+tr:hover {
+    color:black;
+}
+td {
+    margin:0px 5px;
+}
+.hour {
+    width:75px;
+}
+.prop, .oper {
+    width:40px;
+}
