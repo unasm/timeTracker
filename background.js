@@ -38,6 +38,9 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
 });
 //
 
+
+
+
 //
 chrome.runtime.onStartup.addListener(function() {
     console.log("on start up");
@@ -89,3 +92,44 @@ chrome.tabs.onCreated.addListener(function(tabInfo) {
 //        }
 //    });
 //});
+//
+
+
+
+//localStorage.unreadCount = 11;
+function onAlarm(alarm) {
+    console.log(alarm);
+    if (alarm == undefined) {
+        return ;
+    }
+    if (alarm.name === "checkFocus") {
+        chrome.windows.getCurrent({"populate" : true}, function(window) {
+            if (window && window.hasOwnProperty("focused")) {
+                //避免 用户已经离开了，仍然在及时
+                if (window.focused === false) {
+                    tabs.setLeaving();
+                } else if(tabs.isLeaving == true){
+                    tabs.comeBack();
+                }
+            } 
+        });
+    }
+    
+    if (alarm.name == "cleanOldData") {
+        tabs.storage.cleanOldData();
+    }
+    //chrome.alarms.create('checkFocus', {periodInMinutes: 1});
+}
+
+chrome.alarms.onAlarm.addListener(onAlarm);
+if (chrome.runtime && chrome.runtime.onStartup) {
+    chrome.alarms.create('checkFocus', {periodInMinutes: 1});
+    chrome.alarms.create('cleanOldData', {periodInMinutes: 1});
+    chrome.runtime.onStartup.addListener(function(){
+        console.log("start up");
+    });
+}
+
+chrome.windows.onCreated.addListener(function (){
+    console.log("window clicked");
+})

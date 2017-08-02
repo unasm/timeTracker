@@ -162,6 +162,35 @@
     };
 
     /**
+     * 根据href 从storeage中删除一个元素
+     *
+     * @param {string} href   要删除的url
+     * @param {function} callback The callback to fire after saving
+     */
+    Store.prototype.cleanOldData = function (timeLength, callback) {
+        if (timeLength === -1 || timeLength === undefined) {
+            timeLength = 86400 * 3;
+            //timeLength = 86400 * 3;
+        }
+        chrome.storage.local.get(this._dbName, function(storage) {
+            var data = storage[this._dbName];
+            var todos = data.todos;
+            var deadLine = util.getNow() - timeLength;
+            for (var i = todos.length - 1 ; i >= 0; i--) {
+                if (todos[i].startTime != undefined  && todos[i].startTime < deadLine) {
+                    todos.splice(i, 1)
+                }
+            }
+
+            chrome.storage.local.set(storage, function() {
+                if (callback !== undefined) {
+                    callback.call(this, todos);
+                }
+            }.bind(this));
+        }.bind(this));
+    };
+
+    /**
      * Will drop all storage and start fresh
      *
      * @param {function} callback The callback to fire after dropping the data

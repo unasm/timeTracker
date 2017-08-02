@@ -23,6 +23,7 @@
             "js/model/basemodel.js",
             "js/util/util.js",
             "js/store.js",
+            "js/alarms.js",
             "js/config.js",
             "js/tabs.js",
             "js/model/logModel.js",

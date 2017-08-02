@@ -41,7 +41,7 @@
             title : title
         }
         this.storage.save(newItem, function (updateData){
-            console.log(updateData) 
+            //console.log(updateData) 
         });
         //    }.bind(this));
 }

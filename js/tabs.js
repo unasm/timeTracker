@@ -16,6 +16,7 @@
         // key 为 hostname
         this.DbName = dbName;
         this.activeTab = -1;
+        this.isLeaving = false;
         this.storage = new window.background.Store(this.DbName);
         this.model = new window.background.LogModel(this.storage);
     }
@@ -27,33 +28,41 @@
             return false;
         }
         if (util.isUrl(tabInfo.url)) {
-            var hostname = util.parserUrl(tabInfo.url).hostname;
-            if (this.tabList.hasOwnProperty(tabId)) {
-                this.tabList[tabId] =  {
-                    //tabId: tabId,
-                    url : tabInfo.url,
-                    startTime : util.getNow(),
-                    windowId : tabInfo.windowId,
-                    hostname : hostname,
-                    index : tabInfo.index,
-                        //costTime : 0
-                };
-            } else {
-                this.tabList[tabId] =  {
-                    tabId: tabId,
-                    url : tabInfo.url,
-                    startTime : util.getNow(),
-                    windowId : tabInfo.windowId,
-                    hostname : hostname,
-                    index : tabInfo.index,
-                        //costTime : 0
-                };
+            this.tabList[tabId] =  {
+                tabId: tabId,
+                url : tabInfo.url,
+                startTime : -1,
+                windowId : tabInfo.windowId,
+                hostname : util.parserUrl(tabInfo.url).hostname,
+                index : tabInfo.index
+                    //costTime : 0
+            };
+            if (this.activeTab == tabId) {
+                this.tabList[tabId].startTime = util.getNow();
             }
         } else {
             //console.log("not a url : ", tabInfo.url)
         }
     }
+    
+    Tabs.prototype.setLeaving = function() {
+        this.CalTime();
+        this.isLeaving = true;
+        console.log("leaving");
+    }
 
+    Tabs.prototype.comeBack = function() {
+        console.log("coming back");
+        if (this.activeTab !== -1) {
+            if (this.tabList.hasOwnProperty(this.activeTab)) {
+                if (this.tabList[this.activeTab].startTime == -1)  {
+                    // 已经重新开始，并且startTime不为-1 
+                    this.tabList[this.activeTab].startTime = util.getNow();
+                }
+            }
+        }
+        this.isLeaving = false;
+    }
 
     /**
       用户无论打开，关闭，或者跳转新的，都应该计算之前active的 时间
@@ -70,13 +79,12 @@
             return ;
         }
         var tabInfo = this.tabList[tabId];
-        if (tabInfo !== undefined) {
-            var now = util.getNow();
-            var costTime = now - tabInfo.startTime;
+        if (tabInfo !== undefined && tabInfo.startTime !== -1) {
+            var costTime = util.getNow() - tabInfo.startTime;
             this.model.create(tabInfo.url, costTime);
             //this.tabList[this.activeTab].costTime  += now - tabInfo.startTime;
             //清理时间，防止 多次计算
-            this.tabList[tabId].startTime = now;
+            this.tabList[tabId].startTime = -1;
             console.log(tabId + " : stayed " + costTime + "s : " + tabInfo.url);
         }
         // 给这个事件, 添加时间
@@ -102,7 +110,7 @@
             this.GetOrSet(tabId);
         } else {
             //更新起止时间
-            this.tabList[tabId].startTime = util.getNow();
+            //this.tabList[tabId].startTime = util.getNow();
         }
     }
 
@@ -140,6 +148,16 @@
 
     Tabs.prototype.SetActive = function(tabId) {
         this.activeTab = tabId;
+        if (tabId !== -1) {
+            if (this.isLeaving == false) {
+                this.isLeaving = true;
+            }
+            if (this.tabList.hasOwnProperty(tabId)) {
+                this.tabList[tabId].startTime = util.getNow();
+            } else {
+                this.GetOrSet(tabId);
+            }
+        }
     }
 
     //获得tab 的信息,如果得不到，则返回为空，但是 要从google的 api中初始化
