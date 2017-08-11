@@ -43,6 +43,8 @@ Util.prototype.getMin = function(vala, valb) {
 }
 
 Util.prototype.stampToMinutes = function(timestamp) {
-    return parseInt(timestamp / 60) + "分钟" 
+    var tmp = timestamp / 60.0;
+    //tmp = parseInt(tmp * 100) * 0.01;
+    return tmp.toFixed(2) + "分钟" ;
 }
 var util = new Util();

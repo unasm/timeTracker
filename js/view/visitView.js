@@ -8,14 +8,15 @@
 	 * @constructor
 	 */
 	function View() {
-		this.pageNum = 10;
+		this.pageNum = 30;
 		this.defaultTemplate 
 		= '<tr data-href = "{{host}}">'
 		+	'<td class = "color"></td>'
 		+	'<td class = "url">{{host}}</td>'
 		+	'<td class = "hour textCenter">{{time}}</td>'
-		+	'<td class = "textCenter prop">{{tag}}</td>'
+		+	'<td class = "textCenter">{{nums}}次</td>'
 		+	'<td class = "textCenter oper" ><button class = "add">禁止</button></td>'
+		+	'<td class = "textCenter prop">{{tag}}</td>'
 		+'</tr>'
 }
 
@@ -34,6 +35,7 @@
 	 * });
 	 */
 	View.prototype.showPage = function (data, pageId) {
+        console.log(data);
 		var i, l;
 		var view = '';
 		pageId = pageId || 0;
@@ -64,7 +66,6 @@
      * })
 	 */
 	View.prototype.showOne = function(row) {
-        console.log(row);
 		var template = this.defaultTemplate;
 		var notice = '';
 		var deleteNode = '';
@@ -72,7 +73,7 @@
 		
 		var minute = util.stampToMinutes(row.length);
 		template = template.replace(/{{host}}/g, row.host);
-		//template = template.replace('{{host}}', row.host);
+		template = template.replace('{{nums}}', row.times);
 		template = template.replace('{{time}}', minute);
 		template = template.replace('{{tag}}', tag);
 		return template;

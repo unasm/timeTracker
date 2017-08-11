@@ -24,14 +24,9 @@
         this.visitView = new app.VisitedView;
         this.visitController = new app.VisitedController(this.visitModel, this.visitView);
         this.visitController.showAll();
-
-		//this.model = new app.VisitedModel(this.storage);	
-		//this.view = new app.VisitedView();	
-		//this.controller = new app.VisitedController(this.model, this.view);
-		//this.controller.showAll();
 	}
 	if (window.location.href.indexOf('#') === -1) {
-      window.location.hash = '#/';
+        window.location.hash = '#/';
     }
 
 	var forbidden = new Forbidden(CONFIG.getForbiddenDbName());
@@ -45,8 +40,8 @@
 	 */
 	function lookupTr(target) {
 		var lookup = target;
-
-		while (lookup.nodeName !== 'TR') {
+        console.log(lookup);
+		while (lookup.hasOwnProperty("nodeName") && lookup.nodeName !== 'TR') {
 			lookup = lookup.parentNode;
 		}
 
@@ -69,12 +64,16 @@
     //    return re.test(url);
 	//}
 	function getHostname(url) {
+        var node = util.parserUrl(url);
+        return node.hostname;
+        /*
 		if (!(url.substr(0, 7) === "http://")) {
 			url = "http://" + url;
 		}
 		var node = document.createElement("a");
 		node.href = url;
 		return node.hostname;
+        */
 	}
 
 	// When the enter key is pressed fire the addItem methodho

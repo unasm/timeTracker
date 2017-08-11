@@ -8,7 +8,8 @@
             window.background.BaseModel.apply(this, arguments);
         }
         this.storage = storage;
-        this.Buffer = [];
+        this.BufferList = [];
+        this.count = -1;
     };
 
 
@@ -27,7 +28,7 @@
      * @param {function} [callback] The callback to fire after the model is created
      */
     InnerModel.prototype.create = function (url, visitTime, title) {
-        if (visitTime < 0.5) {
+        if (visitTime < 0.005) {
             // 一闪而过的页面，并不记录,减小数据量
             return false;
         }
@@ -44,90 +45,92 @@
             //console.log(updateData) 
         });
         //    }.bind(this));
-}
+    }
+    
+    InnerModel.prototype.getCount = function() {
+        return this.BufferList.length; 
+    }
 
-//求一定时间之内 所有的访问网站列表
-InnerModel.prototype.formatWebList = function (startTime, callback) {
+    /**
+     * 求一定时间之内 所有的访问网站列表
+     */
+    InnerModel.prototype.formatWebList = function (startTime, isFresh, callback) {
+        if (isFresh == false && this.BufferList.length > 0) {
+            callback(this.BufferList);
+            return ;
+        }
+        this.read({startTime : startTime}, function(data) {
+            //data = [];
+            //var newItem =  {
+            //    host : "www.baidu.com",
+            //    url : "http://www.yi-jy.com/2016/03/20/chrome-plug-manifest/",
+            //    costTime : 112.12,
+            //    startTime : util.getNow() - 112.12,
+            //    title : "htllo,world"
+            //}
+            //data.push(newItem);
+            //newItem = {
+            //    host : "www.sina.com",
+            //    url : "http://www.yi-jy.com/2016/03/20/chrome-plug-manifest/",
+            //    costTime : 1.12,
+            //    startTime : util.getNow() - 112.12,
+            //    title : "htllo,world"
+            //}
+            //data.push(newItem);
+            var webList = {};
+            for (var i = 0; i < data.length; i++) {
+                if (!data[i].hasOwnProperty("host")) {
+                    data[i].host = util.parserUrl(data[i].url).hostname;
+                }
+                var host = data[i].host ;
+                if (!webList.hasOwnProperty(host)) {
+                    webList[host] = {
+                        length: 0,
+                        host: host,
+                        times : 0,
+                        startTime : -1,
+                    }
+                }
 
-    var webList = {};
-    this.read({startTime : startTime}, function(data) {
-        console.log(data);
-        //data = [];
-        //var newItem =  {
-        //    host : "www.baidu.com",
-        //    url : "http://www.yi-jy.com/2016/03/20/chrome-plug-manifest/",
-        //    costTime : 112.12,
-        //    startTime : util.getNow() - 112.12,
-        //    title : "htllo,world"
-        //}
-        //data.push(newItem);
-        //newItem = {
-        //    host : "www.sina.com",
-        //    url : "http://www.yi-jy.com/2016/03/20/chrome-plug-manifest/",
-        //    costTime : 1.12,
-        //    startTime : util.getNow() - 112.12,
-        //    title : "htllo,world"
-        //}
-        //data.push(newItem);
-        for (var i = 0; i < data.length; i++) {
-            if (!data[i].hasOwnProperty("host")) {
-                data[i].host = util.parserUrl(data[i].url).hostname;
-            }
-            var host = data[i].host ;
-            if (!webList.hasOwnProperty(host)) {
-                webList[host] = {
-                    length: 0,
-                    host: host,
-                    times : 0,
-                    startTime : -1,
+                webList[host].length += data[i].costTime;
+                webList[host].times += 1;
+                if (webList[host].startTime == -1) {
+                    webList[host].startTime = data[i].startTime ;
+                } else if (webList[host].startTime >  data[i].startTime) {
+                    webList[host].startTime = data[i].startTime;
                 }
             }
-
-            webList[host].length += data[i].costTime;
-            webList[host].times += 1;
-            if (webList[host].startTime == -1) {
-                webList[host].startTime = data[i].startTime ;
-            } else if (webList[host].startTime >  data[i].startTime) {
-                webList[host].startTime = data[i].startTime;
+            var sortList = [];
+            webList.each(function(data) {
+                sortList.push(data);
+            });
+            sortList.sort(function(a, b) {
+                return b.length - a.length;
+            });
+            this.BufferList = sortList;
+            callback(this.BufferList);
+        }.bind(this), function (data, query) {
+            //求大于startTime的值
+            for (var q in query) {
+                return data[q] > query[q];
             }
-        }
-        var sortList = [];
-        webList.each(function(data) {
-            console.log(data);
-            sortList.push(data);
         });
-        //for (var key in webList) {
-        //    console.log(key) ;
-        //    sortList.push(webList[key]);
-        //}
-        //console.log(sortList);
-        sortList.sort(function(a, b) {
-           return b.length - a.length;
-        });
-        console.log(sortList);
-        callback(sortList);
-    }, function (data, query) {
-        //求大于startTime的值
-        for (var q in query) {
-            return data[q] > query[q];
-        }
-    });
-}
-
-
-InnerModel.prototype.SyncData = function () {
-    console.log("visit model SyncData");
-}
-
-
-// Export to window
-if (window.app !== undefined) {
-    window.app.LogModel = InnerModel;
-    //    window.app.VisitedModel = Model;
-} else {
-    if (window.background == undefined) {
-        window.background = {};
     }
-    window.background.LogModel = InnerModel;
-}
+
+
+    InnerModel.prototype.SyncData = function () {
+        console.log("visit model SyncData");
+    }
+
+
+    // Export to window
+    if (window.app !== undefined) {
+        window.app.LogModel = InnerModel;
+        //    window.app.VisitedModel = Model;
+    } else {
+        if (window.background == undefined) {
+            window.background = {};
+        }
+        window.background.LogModel = InnerModel;
+    }
 })(window);

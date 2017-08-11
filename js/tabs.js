@@ -19,6 +19,9 @@
         this.isLeaving = false;
         this.storage = new window.background.Store(this.DbName);
         this.model = new window.background.LogModel(this.storage);
+
+        this.blackStorage = window.background.Store(CONFIG.getForbiddenDbName());
+        this.blackModel = window.background.BlackModel(this.blackStorage);
     }
 
     //用户打开新的Tab, 有之前的tab 则覆盖，没有则添加
@@ -179,6 +182,35 @@
 
         return {};
     }
+
+    //检查光标是否仍然在
+    Tabs.prototype.CheckFocus = function () {
+        chrome.windows.getCurrent({"populate" : true}, function(window) {
+            if (window && window.hasOwnProperty("focused")) {
+                //避免 用户已经离开了，仍然在及时
+                if (window.focused === false) {
+                    this.setLeaving();
+                } else if(tabs.isLeaving == true){
+                    this.comeBack();
+                }
+            } 
+        }.bind(this));
+    }
+
+    // 检查是否在黑名单之中，是否可以访问
+    Tabs.prototype.CheckIsForbidden = function() {
+        if (tabInfo && tabInfo.hasOwnProperty("url")) {
+            if (util.isUrl(tabInfo.url)) {
+                node = util.parserUrl(tabInfo.url);
+                blackModel.read({href : node.hostname}, function(data) {
+                    console.log(data) ;
+                    console.log(data.length) ;
+                })
+            }
+        }    
+    }
+
+
     if (window.background == undefined) {
         window.background = {};
     }

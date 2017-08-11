@@ -9,10 +9,6 @@
       }
       this.storage = storage;
     };
-      //return new F();
-  //function Model(storage) {
-   
-  //}
 
 
     if (window.app !== undefined) {

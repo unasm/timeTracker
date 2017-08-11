@@ -59,15 +59,21 @@ h3 {
     font-family:cursive;
     padding: 10px 5px;
     font-size:1.5em;
+    color:black;
 }
 .area {
     margin:10px 5px auto;
 }
 
+.header p{
+    margin:0px;
+}
+
 #visited {
-    height:200px;
+    height:264px;
     overflow:scroll;
-    padding:5px 0;
+    padding:0px 0;
+    display:block;
 }
 tr:hover {
     color:black;

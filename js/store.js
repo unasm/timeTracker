@@ -51,9 +51,7 @@
         }
 
         chrome.storage.local.get(this._dbName, function(storage) {
-            console.log(storage);
             var todos = storage[this._dbName].todos.filter(function (todo) {
-                console.log(todo);
                 for (var q in query) {
                     if (!todo.hasOwnProperty(q)) {
                         return false;

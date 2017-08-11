@@ -27,7 +27,8 @@
             "js/config.js",
             "js/tabs.js",
             "js/model/logModel.js",
-            "js/model/visitedModel.js",
+            //"js/model/visitedModel.js",
+            "js/model/blackModel.js",
             "background.js"
         ],
         "persistent" : false

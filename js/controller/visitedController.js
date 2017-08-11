@@ -9,12 +9,13 @@
      * @param {object} model The model constructor
      * @param {object} view The view constructor
      */
-    function Controller(model, view) {
-        this.model = model;
+    function Controller(logModel, view) {
+        this.model = logModel;
         this.view = view;
 
         this.$listArea = $$("#visited");
         this.$blacked = $$("#blacked");
+        this.$webCount = $$("#webCount");
         this.router = new Router();
         this.router.init();
     }
@@ -23,13 +24,13 @@
      * An event to fire on load. Will get all items and display them in the
      * todo-list
      */
-    Controller.prototype.showAll = function () {
-        console.log("stop into visited controller");
-        var nowTime = util.getNow() -  86400;
+    Controller.prototype.showAll = function (isFresh) {
+        var startTime = util.getNow() -  86400;
         // 获取 时间大于nowTime的所有访问列表
-        this.model.formatWebList(nowTime, function(data) {
+        this.model.formatWebList(startTime, isFresh, function(data) {
             // 根据 host 计算时间
             this.$listArea.innerHTML = this.view.showPage(data, 0);
+            this.$webCount.innerHTML = this.model.getCount();
         }.bind(this));
     };
 

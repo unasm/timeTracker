@@ -9,6 +9,8 @@
 
  }
 
+
+
 // 更新 标题的图标
  Badge.prototype.updateIcon = function(text) {
     if (!localStorage.hasOwnProperty('unreadCount')) {
@@ -52,6 +54,7 @@ chrome.runtime.onStartup.addListener(function() {
 
 // 用户更新url的时候，触发
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    tabs.CheckIsForbidden(tabInfo);
     if (changeInfo.hasOwnProperty("status") && changeInfo.status == "complete") {
         //console.log("on table updated", tab);
         tabs.Update(tabId, tab);
@@ -69,6 +72,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 
 // 打开一个tab, 但是打开未必跳转，所以并不开始计时, 交给active 处理
 chrome.tabs.onCreated.addListener(function(tabInfo) {
+    tabs.CheckIsForbidden(tabInfo);
     if (tabInfo.id !== undefined && (tabInfo.highlighted == false) && (tabInfo.selected == false)) {
         //未被选中的情况下，创建tab，目的在于避免active 触发的时候，两次创建
         if (tabs.activeTab !== tabInfo.openerTabId && tabs.activeTab !== -1) {
@@ -94,7 +98,9 @@ chrome.tabs.onCreated.addListener(function(tabInfo) {
 //});
 //
 
-
+function checkFocus() {
+    
+}
 
 //localStorage.unreadCount = 11;
 function onAlarm(alarm) {
@@ -103,16 +109,7 @@ function onAlarm(alarm) {
         return ;
     }
     if (alarm.name === "checkFocus") {
-        chrome.windows.getCurrent({"populate" : true}, function(window) {
-            if (window && window.hasOwnProperty("focused")) {
-                //避免 用户已经离开了，仍然在及时
-                if (window.focused === false) {
-                    tabs.setLeaving();
-                } else if(tabs.isLeaving == true){
-                    tabs.comeBack();
-                }
-            } 
-        });
+        tabs.CheckFocus()        
     }
     
     if (alarm.name == "cleanOldData") {
@@ -124,7 +121,7 @@ function onAlarm(alarm) {
 chrome.alarms.onAlarm.addListener(onAlarm);
 if (chrome.runtime && chrome.runtime.onStartup) {
     chrome.alarms.create('checkFocus', {periodInMinutes: 1});
-    chrome.alarms.create('cleanOldData', {periodInMinutes: 1});
+    chrome.alarms.create('cleanOldData', {periodInMinutes: 60});
     chrome.runtime.onStartup.addListener(function(){
         console.log("start up");
     });
@@ -132,4 +129,11 @@ if (chrome.runtime && chrome.runtime.onStartup) {
 
 chrome.windows.onCreated.addListener(function (){
     console.log("window clicked");
+})
+chrome.windows.onFocusChanged.addListener(function(windowId) {
+    tabs.CheckFocus();
+    console.log("window focus changed ", windowId);
+})
+chrome.windows.onRemoved.addListener(function(windowId) {
+    console.log("window on remove ", windowId);
 })
