@@ -15,24 +15,23 @@
 
         this.$listArea = $$("#visited");
         this.$blacked = $$("#blacked");
-        this.router = new Router();
-        this.router.init();
+        //this.router = new Router();
+        //this.router.init();
 
         //this.$todoList.addEventListener('click', this._doShowUrl);
 
-        window.addEventListener('load', function () {
-            console.log("window loaded") ;
-            //this._updateFilterState();
-        }.bind(this));
-
-        // Couldn't figure out how to get flatiron to run some code on all pages. I
-        // tried '*', but then it overwrites ALL handlers for all the other pages
-        // and only runs this.
-        window.addEventListener('hashchange', function () {
-            console.log("window hashchange") ;
-            //this._updateFilterState();
-        }.bind(this));
-
+//        window.addEventListener('load', function () {
+//            console.log("window loaded") ;
+//            //this._updateFilterState();
+//        }.bind(this));
+//
+//        // Couldn't figure out how to get flatiron to run some code on all pages. I
+//        // tried '*', but then it overwrites ALL handlers for all the other pages
+//        // and only runs this.
+//        window.addEventListener('hashchange', function () {
+//            console.log("window hashchange") ;
+//        }.bind(this));
+//
         // Make sure on page load we start with a hash to trigger the flatiron and
         // onhashchange routes
 

@@ -60,10 +60,12 @@
         "alarms",
         "activeTab",
         "background",
+        "activeTab",
+        "<all_urls>",
+
         //"bookmarks",
         "sessions"
         //"webview"
-        //"<all_urls>"
 //        {"fileSystem" : ["write"]}
     ]
 }

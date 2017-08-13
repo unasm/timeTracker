@@ -40,7 +40,8 @@
         callback = callback || function () {};
 
         var newItem = {
-            startTime: new Date().getTime(),
+            startTime: util.getNow(),
+            //startTime: new Date().getTime(),
             href: href,
             blockTime: blockTime,
             frozenTime : frozenTime

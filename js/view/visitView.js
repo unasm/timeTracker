@@ -35,19 +35,8 @@
 	 * });
 	 */
 	View.prototype.showPage = function (data, pageId) {
-        console.log(data);
-		var i, l;
 		var view = '';
-		pageId = pageId || 0;
-		var start = pageId * this.pageNum;
-		if (start > (data.length)) {
-			start = start.length;
-		}
-		var end = start + this.pageNum;
-		if (end > data.length) {
-			end = data.length;			
-		}
-		for (i = start; i < end; i++) {
+		for (var i = 0; i < data.length; i++) {
 			view += this.showOne(data[i])
 		}
 		return view;

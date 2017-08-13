@@ -6,7 +6,8 @@
 	<title>Everyone need to die</title>
     -->
 	<title>Promise me , Ned, Promise me</title>
-	<link rel="stylesheet" href="bower_components/todomvc-common/base.css">
+	<link rel="stylesheet" href="css/todomvc-common/base.css">
+	<link rel="stylesheet" href="css/sweetalert.css">
 </head>
 <body>
 	<section class = "area title">
@@ -61,17 +62,17 @@
 				</tbody>
 			</table>
 		</section>
-		<section>
-			<input type = "text" id="add-black" class = "input" placeholder="添加禁止访问黑名单"/>
-			<input type = "button"/>
+		<section class = "secBkadd">
+			<input type = "text" id="add-black" class = "input" placeholder="添加黑名单"/>
+            <span class = "bkBtn">
+                添加
+            </span>
 		</section>
 	</section>
 
 	<input type = "button" id="test" value = "测试"/>
-	<!--
-	<script src="bower_components/todomvc-common/base.js"></script>
--->
-	<script src="bower_components/director/build/director.js"></script>
+	<script src="js/sweetalert.min.js"></script>
+	<script src="js/director.js"></script>
 	<script src="js/bootstrap.js"></script>
 	<script src="js/helpers.js"></script>
 	<script src="js/store.js"></script>

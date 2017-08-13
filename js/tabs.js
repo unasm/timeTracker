@@ -20,8 +20,9 @@
         this.storage = new window.background.Store(this.DbName);
         this.model = new window.background.LogModel(this.storage);
 
-        this.blackStorage = window.background.Store(CONFIG.getForbiddenDbName());
-        this.blackModel = window.background.BlackModel(this.blackStorage);
+        this.blackStorage = new window.background.Store(CONFIG.getForbiddenDbName());
+        this.blackModel = new window.background.BlackModel(this.blackStorage);
+        console.log("well done");
     }
 
     //用户打开新的Tab, 有之前的tab 则覆盖，没有则添加
@@ -198,14 +199,31 @@
     }
 
     // 检查是否在黑名单之中，是否可以访问
-    Tabs.prototype.CheckIsForbidden = function() {
+    Tabs.prototype.CheckIsForbidden = function(tabInfo) {
         if (tabInfo && tabInfo.hasOwnProperty("url")) {
+            console.log(tabInfo.url.substr(0, 16));
+            console.log(tabInfo.url);
+            var substr = tabInfo.url.substr(0, 16) 
+            if (substr != "chrome://newtab/"  && substr != "chrome-devtools:") {
+                //chrome.tabs.executeScript(tabInfo.id, {code : "swal({   title: 'Error!',   text: 'Here's my error message!',   type: 'error',   confirmButtonText: 'Cool' });
+                //    " }, function() {
+                ////chrome.tabs.executeScript(tabInfo.id, {file : "js/sweetalert.min.js", code : "alert('testing'" }, function() {
+                //    console.log("done") ;
+                //});
+            };
             if (util.isUrl(tabInfo.url)) {
-                node = util.parserUrl(tabInfo.url);
-                blackModel.read({href : node.hostname}, function(data) {
-                    console.log(data) ;
-                    console.log(data.length) ;
-                })
+                var node = util.parserUrl(tabInfo.url);
+                this.blackModel.read({href : node.hostname}, function(data) {
+                    if (data.length > 0) {
+                        chrome.tabs.get(tabInfo.id, function(tab) {
+                            alert("plase closed the tab");
+                            chrome.tabs.remove(tabInfo.id, function(optional) {
+                                console.log("tabs remove");
+                                console.log(optional);
+                            });
+                        });
+                    }
+                });
             }
         }    
     }

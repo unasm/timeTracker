@@ -34,6 +34,9 @@ Util.prototype.isUrl = function(url) {
 */
 Util.prototype.parserUrl = function(href) {
     var parser = document.createElement('a');
+    if (href.length <= 7 || href.substr(0, 4) != "http") {
+        href = "http://" + href;
+    }
     parser.href = href;
     return parser;
 }

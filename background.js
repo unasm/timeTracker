@@ -54,8 +54,11 @@ chrome.runtime.onStartup.addListener(function() {
 
 // 用户更新url的时候，触发
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    tabs.CheckIsForbidden(tabInfo);
+    
     if (changeInfo.hasOwnProperty("status") && changeInfo.status == "complete") {
+        if (tab && tab.hasOwnProperty("url")) {
+            tabs.CheckIsForbidden(tab);  
+        }
         //console.log("on table updated", tab);
         tabs.Update(tabId, tab);
     }

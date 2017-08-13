@@ -58,15 +58,18 @@
 		if (row.href == undefined) {
 			return '';
 		}
-
 		console.log(row);
 		if (row.frozenTime !== -1) {
 			//不允许删除
 			notice = row.frozenTime + " 分钟内禁止删除，已加黑12分钟"; 
 		} else {
 			//不在冰冻期内就允许删除
-			notice = "已经禁止12分钟";
-			deleteNode = "<span class = 'delete'>删除</span>";
+            var now = util.getNow();
+            if (row.startTime > 0) {
+                var minute = ((now - row.startTime) / 60.0).toFixed(2);
+                notice = "已经禁止 <span class = 'bkMinute'>" + minute + "</span> 分钟";
+                deleteNode = "<span class = 'delete'>删除</span>";
+            }
 		}
 
 		template = template.replace('{{id}}', row.id);

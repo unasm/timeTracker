@@ -40,10 +40,15 @@
 	 */
 	function lookupTr(target) {
 		var lookup = target;
-        console.log(lookup);
-		while (lookup.hasOwnProperty("nodeName") && lookup.nodeName !== 'TR') {
-			lookup = lookup.parentNode;
-		}
+        //while (lookup.hasOwnProperty("nodeName") && lookup.nodeName !== 'TR') {
+        try {
+            while (lookup.nodeName !== 'TR') {
+                lookup = lookup.parentNode;
+            }
+        } catch (e) {
+            alert("find up tr exception");
+            console.log(e) ;
+        }
 
 		return lookup
 //		return lookup.dataset.href;
@@ -105,5 +110,6 @@
     $$('#test').addEventListener('click', function (e) {
         visited.visitController.showAll();
 	});
+    //swal({   title: "Error!",   text: "Here's my error message!",   type: "error",   confirmButtonText: "Cool" });
     //console.log("asdfa");
 })();
