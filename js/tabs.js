@@ -213,7 +213,7 @@
             };
             if (util.isUrl(tabInfo.url)) {
                 var node = util.parserUrl(tabInfo.url);
-                this.blackModel.read({href : node.hostname}, function(data) {
+                this.blackModel.read({href : node.hostname, isDel: 0}, function(data) {
                     if (data.length > 0) {
                         chrome.tabs.get(tabInfo.id, function(tab) {
                             alert("plase closed the tab");

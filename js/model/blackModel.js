@@ -38,16 +38,28 @@
         href = href || '';
         blockTime = blockTime || -1;
         callback = callback || function () {};
+        this.read({href : href}, function (data) {
+            if (data.length > 0) {
+                if (data[0].hasOwnProperty("isDel") && data[0].isDel == 0) {
+                    return;
+                }
+                data[0].isDel = 0;
+                data[0].startTime = util.getNow();
+                this.update(data[0].id, data[0], callback);  
+            } else {
+                var newItem = {
+                    startTime: util.getNow(),
+                    //startTime: new Date().getTime(),
+                    href: href,
+                    blockTime: blockTime,
+                    frozenTime : frozenTime, 
+                    rmTimes: 0, // 历史上被删除的次数
+                    isDel: 0 // 当前是否已经被删除
+                };
 
-        var newItem = {
-            startTime: util.getNow(),
-            //startTime: new Date().getTime(),
-            href: href,
-            blockTime: blockTime,
-            frozenTime : frozenTime
-        };
-
-        this.storage.save(newItem, callback);
+                this.storage.save(newItem, callback);
+            }
+        }.bind(this));
     };
 
     // Export to window

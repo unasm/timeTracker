@@ -102,9 +102,21 @@ td {
 .bkMinute {
     font-style: italic;
     color:black;
+    text-align:right;
+    display:inline-block;
+    width:95px;
 }
 
 
 .secBkadd {
     margin: 5px 8px;
+}
+.delete:hover , .add:hover{
+    cursor:pointer
+}
+
+#blacked {
+    height:110px;
+    display:block;
+    overflow:scroll;
 }

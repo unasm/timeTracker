@@ -12,9 +12,9 @@
 		this.defaultTemplate 
 		= '<tr data-href = "{{host}}">'
 		+	'<td class = "color"></td>'
-		+	'<td class = "url">{{host}}</td>'
-		+	'<td class = "hour textCenter">{{time}}</td>'
-		+	'<td class = "textCenter">{{nums}}次</td>'
+		+	'<td class = "url" title = "请求网址">{{host}}</td>'
+		+	'<td class = "hour textCenter" title = "访问的时间">{{time}}</td>'
+		+	'<td class = "textCenter" title = "访问次数">{{nums}}次</td>'
 		+	'<td class = "textCenter oper" ><button class = "add">禁止</button></td>'
 		+	'<td class = "textCenter prop">{{tag}}</td>'
 		+'</tr>'

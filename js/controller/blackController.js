@@ -60,22 +60,17 @@
      */
     Controller.prototype.addItem = function (e, href, trNode) {
         var input = this.$listArea;
-        this.model.read({href : href}, function (data) {
-            if (data.length > 0) {
-                return ;
+        this.model.create(href, -1, -1, function (data) {
+            if (trNode !== undefined) {
+                var addNode = trNode.querySelector("[class='add']");
+                addNode.className = addNode.className.replace('add', '');
+                addNode.className += "done";
             }
-            this.model.create(href, -1, -1, function (data) {
-                if (trNode !== undefined) {
-                    var addNode = trNode.querySelector("[class='add']");
-                    addNode.className = addNode.className.replace('add', '');
-                    addNode.className += "done";
-                }
 
-                if (data.length == 1) {
-                    var node = this.view.showOne(data[0]);
-                    this.$blacked.innerHTML += node;
-                }
-            }.bind(this));
+            if (data.length == 1) {
+                var node = this.view.showOne(data[0]);
+                this.$blacked.innerHTML += node;
+            }
         }.bind(this));
     };
 
@@ -86,12 +81,24 @@
      * @param {number} id The ID of the item to remove from the DOM and
      * storage
      */
-    Controller.prototype.removeItem = function (id) {
-        this.model.remove(id, function () {
-            var ids = [].concat(id);
-            ids.forEach( function(id) {
-                this.$blacked.removeChild($$('[data-id="' + id + '"]'));
-            }.bind(this));
+    Controller.prototype.removeItem = function (id, hostname) {
+        this.model.read({id: parseInt(id)}, function (row) {
+            console.log(row);
+            console.log(hostname);
+            if (row.length > 0) {
+                row[0].isDel = 1;
+                row[0].rmTimes += 1;
+                this.model.update(row[0].id, row[0], function(data) {
+                    console.log(data);
+                    this.$blacked.removeChild($$('[data-id="' + row[0].id + '"]'));
+                }.bind(this));  
+            }
+           
+            /*
+                var ids = [].concat(id);
+                ids.forEach( function(id) {
+                }.bind(this));
+            */
             //this._filter();
         }.bind(this));
     };

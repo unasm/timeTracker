@@ -111,7 +111,7 @@
 
                 chrome.storage.local.set(storage, function() {
                     chrome.storage.local.get(this._dbName, function(storage) {
-                        callback.call(this, storage[this._dbName].todos);
+                        callback.call(this, [updateData], storage[this._dbName].todos);
                     }.bind(this));
                 }.bind(this));
 

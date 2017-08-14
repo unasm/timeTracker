@@ -89,11 +89,13 @@
 			forbidden.controller.addItem(e, parNode.dataset.href, parNode);
 		}
 	});
+    
+
 	$$('#blacked').addEventListener('click', function (e) {
 		var target = e.target;
 		var parNode = lookupTr(target)
 		if (target.className.indexOf("delete") > -1 && parNode.dataset.id != undefined) {
-			forbidden.controller.removeItem(parNode.dataset.id);
+			forbidden.controller.removeItem(parNode.dataset.id, parNode.dataset.href);
 		}
 	});
 	$$('#add-black').addEventListener('keypress', function (e) {
