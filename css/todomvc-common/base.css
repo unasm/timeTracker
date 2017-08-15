@@ -63,13 +63,13 @@ h3 {
 }
 
 #add-black {
-    width:170px;
+    width:205px;
     margin:2px 0px;
 }
 .title {
-    font-family:cursive;
+    font-family:fantasy;
     padding: 10px 5px;
-    font-size:1.5em;
+    font-size:1.8em;
     color:black;
 }
 .area {
@@ -82,7 +82,8 @@ h3 {
 
 #visited {
     height:264px;
-    overflow:scroll;
+    overflow-y:scroll;
+    overflow-x:hidden;
     padding:0px 0;
     display:block;
 }
@@ -116,7 +117,12 @@ td {
 }
 
 #blacked {
-    height:110px;
+    height:115px;
     display:block;
-    overflow:scroll;
+    overflow-y:scroll;
+    overflow-x:hidden;
 }
+/*
+    隐藏chrome的滚动条
+*/
+::-webkit-scrollbar{width:0px}

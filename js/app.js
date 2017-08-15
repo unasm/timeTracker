@@ -46,7 +46,7 @@
                 lookup = lookup.parentNode;
             }
         } catch (e) {
-            alert("find up tr exception");
+            //alert("find up tr exception");
             console.log(e) ;
         }
 
@@ -85,7 +85,7 @@
 	$$('#visited').addEventListener('click', function (e) {
 		var target = e.target;
 		var parNode = lookupTr(target)
-		if (target.className.indexOf("add") > -1 && parNode.dataset.href != undefined) {
+		if (target.className.indexOf("add") > -1 && parNode != null && parNode.dataset.href != undefined) {
 			forbidden.controller.addItem(e, parNode.dataset.href, parNode);
 		}
 	});
@@ -94,7 +94,7 @@
 	$$('#blacked').addEventListener('click', function (e) {
 		var target = e.target;
 		var parNode = lookupTr(target)
-		if (target.className.indexOf("delete") > -1 && parNode.dataset.id != undefined) {
+		if (target.className.indexOf("delete") > -1 && parNode != null && parNode.dataset.id != undefined) {
 			forbidden.controller.removeItem(parNode.dataset.id, parNode.dataset.href);
 		}
 	});
@@ -109,9 +109,11 @@
 			target.value = '';
 		}
 	});
+    /*
     $$('#test').addEventListener('click', function (e) {
         visited.visitController.showAll();
 	});
+    */
     //swal({   title: "Error!",   text: "Here's my error message!",   type: "error",   confirmButtonText: "Cool" });
     //console.log("asdfa");
 })();
