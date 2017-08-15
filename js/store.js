@@ -52,16 +52,28 @@
 
         chrome.storage.local.get(this._dbName, function(storage) {
             var todos = storage[this._dbName].todos.filter(function (todo) {
+                //var flag = 1;
+                // 必须全部条件符合才可以
                 for (var q in query) {
+                    if (query.__proto__.hasOwnProperty(q)) {
+                        // _proto 非数据类的不在比较之列
+                        continue;
+                    }
                     if (!todo.hasOwnProperty(q)) {
                         return false;
                     }
                     if (compare === undefined) {
-                        return query[q] === todo[q];
+                        if ((query[q] === todo[q]) === false) {
+                            return false;
+                        }
                     } else {
                         return compare(todo, query);
+                        if (compare(todo, query) === false) {
+                            return false;
+                        }
                     }
                 }
+                return true;
             });
             callback.call(this, todos);
         }.bind(this));

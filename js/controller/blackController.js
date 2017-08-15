@@ -82,6 +82,7 @@
      * storage
      */
     Controller.prototype.removeItem = function (id, hostname) {
+        console.log(id, hostname);
         this.model.read({id: parseInt(id)}, function (row) {
             console.log(row);
             console.log(hostname);
