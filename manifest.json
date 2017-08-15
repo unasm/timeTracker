@@ -1,21 +1,18 @@
 {
 	"manifest_version": 2,
-	"name": "行走记录仪",
+	"name": "时间的魔术师",
 	"version": "1.0",
     "default_locale" : "zh_CN", 
-	"description": "记录浏览的途径",
+	"description": "记录浏览的网站次数以及时间，并且禁止访问黑名单中网址",
 	"icons": {
-        "128": "images/icon128.png"
+        "128": "images/icon128.png",
+        "48": "images/icon48.png",
+        "38": "images/icon38.png",
+        "19": "images/icon19.png",
+        "16": "images/icon16.png"
         //"19" : "images/icon19.png"
     },
-    //"app" : {
-    //    "background": {
-    //        //"scripts" : ["background.js"]
-    //        "page" : "background.html",
-    //        "persistent" : false
-    //    }
-    //},
-
+    
     "background" : {
         //"page" : "background.html",
         "scripts" : [
@@ -33,7 +30,6 @@
         ],
         "persistent" : false
     },
-	//"default_icon": "images/icon19.png",
 	"browser_action": {
 		"default_icon": "images/icon19.png",
         "default_title" : "everyone need to die"
@@ -52,20 +48,14 @@
     //},
           
 	"permissions": [
-        "notifications", 
+        //"notifications", 
         //"fullscreen",
         "storage",
         "tabs",
-        "webNavigation",
+        //"webNavigation",
         "alarms",
         "activeTab",
         "background",
-        "activeTab",
-        "<all_urls>",
-
-        //"bookmarks",
-        "sessions"
-        //"webview"
-//        {"fileSystem" : ["write"]}
+        "activeTab"
     ]
 }

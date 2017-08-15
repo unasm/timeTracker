@@ -216,8 +216,8 @@
                 this.blackModel.read({href : node.hostname, isDel: 0}, function(data) {
                     if (data.length > 0) {
                         chrome.tabs.get(tabInfo.id, function(tab) {
-                            alert("plase closed the tab");
                             chrome.tabs.remove(tabInfo.id, function(optional) {
+                                alert("plase closed the tab");
                                 console.log("tabs remove");
                                 console.log(optional);
                             });
