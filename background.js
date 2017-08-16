@@ -54,11 +54,12 @@ chrome.runtime.onStartup.addListener(function() {
 
 // 用户更新url的时候，触发
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    
+    console.log("updating tab", tab, changeInfo, tabs.checkForbiddenId, tab.id) ;
+    if (tab && tab.hasOwnProperty("url") && tabs.checkForbiddenId != tab.id) {
+        tabs.CheckIsForbidden(tab);  
+    }
     if (changeInfo.hasOwnProperty("status") && changeInfo.status == "complete") {
-        if (tab && tab.hasOwnProperty("url")) {
-            tabs.CheckIsForbidden(tab);  
-        }
+        
         //console.log("on table updated", tab);
         tabs.Update(tabId, tab);
     }
@@ -101,10 +102,6 @@ chrome.tabs.onCreated.addListener(function(tabInfo) {
 //});
 //
 
-function checkFocus() {
-    
-}
-
 //localStorage.unreadCount = 11;
 function onAlarm(alarm) {
     console.log(alarm);
@@ -118,7 +115,6 @@ function onAlarm(alarm) {
     if (alarm.name == "cleanOldData") {
         tabs.storage.cleanOldData();
     }
-    //chrome.alarms.create('checkFocus', {periodInMinutes: 1});
 }
 
 chrome.alarms.onAlarm.addListener(onAlarm);

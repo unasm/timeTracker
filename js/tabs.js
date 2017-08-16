@@ -17,6 +17,8 @@
         this.DbName = dbName;
         this.activeTab = -1;
         this.isLeaving = false;
+        //尽量保证只检查一次，alert一次
+        this.checkForbiddenId = -1;
         this.storage = new window.background.Store(this.DbName);
         this.model = new window.background.LogModel(this.storage);
 
@@ -200,6 +202,8 @@
 
     // 检查是否在黑名单之中，是否可以访问
     Tabs.prototype.CheckIsForbidden = function(tabInfo) {
+        console.log("checking forbidden", tabInfo.id);
+        this.checkForbiddenId = tabInfo.id;
         if (tabInfo && tabInfo.hasOwnProperty("url")) {
             console.log(tabInfo.url.substr(0, 16));
             console.log(tabInfo.url);
@@ -216,12 +220,20 @@
                 this.blackModel.read({href : node.hostname, isDel: 0}, function(data) {
                     if (data.length > 0) {
                         chrome.tabs.get(tabInfo.id, function(tab) {
-                            chrome.tabs.remove(tabInfo.id, function(optional) {
-                                alert("plase closed the tab");
-                                console.log("tabs remove");
-                                console.log(optional);
-                            });
-                        });
+                            if (tab != undefined) {
+                                chrome.tabs.remove(tabInfo.id, function(optional) {
+                                    alert("plase closed the tab");
+                                    console.log("tabs remove");
+                                    console.log(optional);
+                                    this.checkForbiddenId = -1;
+                                }.bind(this)); 
+                            } else {
+                                this.checkForbiddenId = -1;
+                            }
+                           
+                        }.bind(this));
+                    } else {
+                        this.checkForbiddenId = -1;
                     }
                 });
             }
