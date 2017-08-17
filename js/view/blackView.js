@@ -72,10 +72,10 @@
             var now = util.getNow();
             if (row.startTime > 0) {
                 //var minute = ((now - row.startTime) / 60.0).toFixed(2)
-            //console.log(row.href, now - row.startTime);
+                //console.log(row.href, now - row.startTime);
                 var timeStr = this.formatTime(now - row.startTime);
-                notice = "<span class = 'bkMinute' title = '" + timeStr + "分钟未访问'>" + timeStr + "</span>";
-                deleteNode = "<span class = 'delete'>删除</span>";
+                notice = "<span class = 'bkMinute' title = '" + timeStr + "分钟未访问该网站，加油，不忘初心,你可以做更多更有意义的事情'>" + timeStr + "</span>";
+                deleteNode = "<span class = 'delete' title = '点击从黑名单中删除'>删除</span>";
             }
 		}
 

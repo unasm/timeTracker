@@ -15,7 +15,7 @@
 		+	'<td class = "url" title = "请求网址">{{host}}</td>'
 		+	'<td class = "hour textCenter" title = "访问的时间">{{time}}</td>'
 		+	'<td class = "textCenter" title = "访问次数">{{nums}}次</td>'
-		+	'<td class = "textCenter oper" ><button class = "add">禁止</button></td>'
+		+	'<td class = "textCenter oper" ><button class = "add" title = "点击加入黑名单">禁止</button></td>'
 		+	'<td class = "textCenter prop">{{tag}}</td>'
 		+'</tr>'
 }
