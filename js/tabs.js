@@ -17,14 +17,12 @@
         this.DbName = dbName;
         this.activeTab = -1;
         this.isLeaving = false;
-        //尽量保证只检查一次，alert一次
-        this.checkForbiddenId = -1;
         this.storage = new window.background.Store(this.DbName);
         this.model = new window.background.LogModel(this.storage);
 
         this.blackStorage = new window.background.Store(CONFIG.getForbiddenDbName());
         this.blackModel = new window.background.BlackModel(this.blackStorage);
-        console.log("well done");
+        //console.log("well done");
     }
 
     //用户打开新的Tab, 有之前的tab 则覆盖，没有则添加
@@ -201,9 +199,9 @@
     }
 
     // 检查是否在黑名单之中，是否可以访问
+    // 伪造的，则必须包含tab id 和url 对象
     Tabs.prototype.CheckIsForbidden = function(tabInfo) {
         console.log("checking forbidden", tabInfo.id);
-        this.checkForbiddenId = tabInfo.id;
         if (tabInfo && tabInfo.hasOwnProperty("url")) {
             console.log(tabInfo.url.substr(0, 16));
             console.log(tabInfo.url);
@@ -219,21 +217,20 @@
                 var node = util.parserUrl(tabInfo.url);
                 this.blackModel.read({href : node.hostname, isDel: 0}, function(data) {
                     if (data.length > 0) {
-                        chrome.tabs.get(tabInfo.id, function(tab) {
-                            if (tab != undefined) {
-                                chrome.tabs.remove(tabInfo.id, function(optional) {
-                                    alert("plase closed the tab");
-                                    console.log("tabs remove");
-                                    console.log(optional);
-                                    this.checkForbiddenId = -1;
-                                }.bind(this)); 
-                            } else {
-                                this.checkForbiddenId = -1;
-                            }
-                           
-                        }.bind(this));
-                    } else {
-                        this.checkForbiddenId = -1;
+                        try {
+                            chrome.tabs.get(tabInfo.id, function(tab) {
+                                console.log(tab);
+                                if (tab != undefined)  {
+                                    chrome.tabs.remove(tabInfo.id, function(optional) {
+                                        //alert("plase closed the tab");
+                                        console.log("tabs remove");
+                                        console.log(optional);
+                                    }.bind(this)); 
+                                }
+                            }.bind(this)); 
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 });
             }

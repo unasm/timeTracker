@@ -54,12 +54,10 @@ chrome.runtime.onStartup.addListener(function() {
 
 // 用户更新url的时候，触发
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    console.log("updating tab", tab, changeInfo, tabs.checkForbiddenId, tab.id) ;
-    if (tab && tab.hasOwnProperty("url") && tabs.checkForbiddenId != tab.id) {
-        tabs.CheckIsForbidden(tab);  
-    }
     if (changeInfo.hasOwnProperty("status") && changeInfo.status == "complete") {
-        
+        if (tab && tab.hasOwnProperty("url")) {
+            tabs.CheckIsForbidden(tab);  
+        }    
         //console.log("on table updated", tab);
         tabs.Update(tabId, tab);
     }
@@ -136,3 +134,32 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 chrome.windows.onRemoved.addListener(function(windowId) {
     console.log("window on remove ", windowId);
 })
+
+
+//chrome.webNavigation.onCommitted.addListener(function(e) {
+//    alert(e.url);
+//    console.log(e.url);
+//})
+//
+
+//chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
+chrome.webRequest.onBeforeRequest.addListener(function(details) {
+    //console.log(details)
+    if (details && details.hasOwnProperty('type') && details.type == 'main_frame') {
+        tabs.CheckIsForbidden({url : details.url, id : details.tabId});
+        //alert("now is : " + details.url);
+        console.log(details);
+        //return {cancel: true};
+    }
+}, {urls : ["*://*.com/*"]}, ["blocking"]);
+
+
+//chrome.webNavigation.onCommitted.addListener(function(e) {
+//         // ...
+//    alert("testing")
+//}, {
+//    url: [
+//        {hostSuffix: 'baidu.com'},
+//        {hostSuffix: 'baidu.com.au'}
+//    ]
+//});

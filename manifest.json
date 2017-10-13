@@ -28,7 +28,7 @@
             "js/model/blackModel.js",
             "background.js"
         ],
-        "persistent" : false
+        "persistent" : true
     },
 	"browser_action": {
 		"default_icon": "images/icon19.png",
@@ -56,6 +56,9 @@
         "alarms",
         "activeTab",
         "background",
-        "activeTab"
+        "activeTab",
+        "webRequest",
+        "webRequestBlocking",
+        "*://*.com/*"
     ]
 }
