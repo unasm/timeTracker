@@ -69,11 +69,13 @@ h3 {
 .title {
     font-family:fantasy;
     padding: 10px 5px;
+    /*
     font-size:1.8em;
+    */
     color:black;
 }
 .area {
-    margin:10px 5px auto;
+    margin:0px 5px auto;
 }
 
 .header p{
@@ -105,7 +107,7 @@ td {
     color:black;
     text-align:right;
     display:inline-block;
-    width:95px;
+    width:115px;
 }
 
 

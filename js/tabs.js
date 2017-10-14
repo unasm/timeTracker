@@ -9,6 +9,28 @@
 
 (function () {
 	'use strict';
+    function showMsg(url) {
+        var hostname  = util.parserUrl(url).hostname;
+        chrome.notifications.create(hostname, {
+          type: "basic",
+          title: "Please sir",
+          message: "如果你冷静的话，你会发现，这些都毫无意义,我们应该做些有意义的事情",
+          iconUrl: "images/icon128.png",
+          //iconUrl: "url_to_small_icon"
+        }, function(noticeId) {
+            console.log("callbacking: " + noticeId);
+            //alert("callbacking");
+            setTimeout(() => {
+                chrome.notifications.clear(noticeId, function(wasCleared) {
+                    //alert("cleared")
+                    console.log("showMsg_cleard: " + wasCleared);
+                })
+            }, 6000);
+            //alert(noticeId);
+        }); 
+    }
+   
+
 
     function Tabs(dbName) {
         //key 为 tab Id
@@ -224,7 +246,8 @@
                                     chrome.tabs.remove(tabInfo.id, function(optional) {
                                         //alert("plase closed the tab");
                                         console.log("tabs remove");
-                                        console.log(optional);
+                                        showMsg(tabInfo.url);
+                                        //console.log(optional);
                                     }.bind(this)); 
                                 }
                             }.bind(this)); 

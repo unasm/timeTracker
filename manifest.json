@@ -48,7 +48,7 @@
     //},
           
 	"permissions": [
-        //"notifications", 
+        "notifications", 
         //"fullscreen",
         "storage",
         "tabs",

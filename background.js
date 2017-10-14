@@ -144,7 +144,6 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 
 //chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
 chrome.webRequest.onBeforeRequest.addListener(function(details) {
-    //console.log(details)
     if (details && details.hasOwnProperty('type') && details.type == 'main_frame') {
         tabs.CheckIsForbidden({url : details.url, id : details.tabId});
         //alert("now is : " + details.url);
